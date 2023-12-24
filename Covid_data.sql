@@ -38,11 +38,11 @@ ORDER BY 1,2
 
 --Highest infection rate compared to population
 
-SELECT location, population, MAX(total_cases) as max_cases, MAX((total_cases/population))*100 as max_population_infected
+SELECT location, population, date, MAX(total_cases) as max_cases, MAX((total_cases/population))*100 as percent_population_infected
 FROM `arched-sorter-403020.Covid.Data`
-WHERE continent is not null
-GROUP BY location, population
-ORDER BY max_population_infected desc
+--WHERE continent is not null
+GROUP BY location, population, date
+ORDER BY percent_population_infected desc
 
 
 --Countries with highest death count per population
@@ -120,3 +120,13 @@ where continent is not null
 
 SELECT*
 FROM Covid.percent_population_vaccinated
+
+
+--Death count per continent
+
+Select location, SUM(cast(new_deaths as int)) as Total_death_count
+FROM `arched-sorter-403020.Covid.Data`
+WHERE continent is null
+and location not in ('World', 'European Union', 'International', 'Low income', 'Lower middle income', 'Upper middle income', 'High income')
+GROUP BY location
+ORDER BY Total_death_count desc
